@@ -29,6 +29,32 @@ void main() {
     expect(sounds, Cuelume.sounds);
   });
 
+  test('SoundSpec.system has no volume; custom carries one', () {
+    const system = SoundSpec.system(SoundName.press);
+    const custom = SoundSpec.custom(SoundName.press, volume: 0.4);
+
+    expect(system, const SoundSpec.system(SoundName.press));
+    expect(system, isNot(custom));
+    expect(system.name, SoundName.press);
+    expect(custom.name, SoundName.press);
+
+    switch (system) {
+      case SystemSoundSpec(:final name):
+        expect(name, SoundName.press);
+        expect(system.volume, isNull);
+      case CustomSoundSpec():
+        fail('system spec must not match custom');
+    }
+
+    switch (custom) {
+      case CustomSoundSpec(:final name, :final volume):
+        expect(name, SoundName.press);
+        expect(volume, 0.4);
+      case SystemSoundSpec():
+        fail('custom spec must not match system');
+    }
+  });
+
   test('invalid volume and disabled playback are silent', () {
     Cuelume.setEnabled(false);
     Cuelume.play(SoundName.chime);

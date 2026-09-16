@@ -63,7 +63,10 @@ final class SoloudCuePlayback implements CuePlayback {
   }) {
     if (!isReady || pcm.isEmpty) return false;
     try {
-      final bytes = pcm.buffer.asUint8List(pcm.offsetInBytes, pcm.lengthInBytes);
+      final bytes = pcm.buffer.asUint8List(
+        pcm.offsetInBytes,
+        pcm.lengthInBytes,
+      );
       final source = _soloud.setBufferStream(
         maxBufferSizeBytes: bytes.length,
         bufferingType: BufferingType.preserved,

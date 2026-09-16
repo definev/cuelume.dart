@@ -637,9 +637,9 @@ class _CuelumeExamplePageState extends State<CuelumeExamplePage>
           ),
           const SizedBox(height: 17),
           CuelumeListener(
-            hover: SoundName.chime,
-            press: SoundName.press,
-            release: SoundName.release,
+            hover: .custom(SoundName.chime, volume: 0.2),
+            press: .custom(SoundName.press, volume: 0.7),
+            release: .system(SoundName.release),
             child: _ActionButton(
               label: 'TRY THE BOUND BUTTON',
               leading: '⌁',
@@ -768,7 +768,7 @@ class _CuelumeExamplePageState extends State<CuelumeExamplePage>
       itemBuilder: (context, index) {
         final sound = sounds[index];
         return CuelumeListener(
-          hover: sound,
+          hover: SoundSpec.system(sound),
           child: _SoundTile(
             sound: sound,
             info: _descriptions[sound]!,

@@ -71,7 +71,7 @@ packages:
       path: ".."
       relative: true
     source: path
-    version: "0.1.0"
+    version: "1.0.0"
   fake_async:
     dependency: transitive
     description:
@@ -113,10 +113,10 @@ packages:
     dependency: transitive
     description:
       name: flutter_soloud
-      sha256: fa1521de7fab9cd7510b9e21d2674ef319d76de8fefe6bf1ff35b5df23cedf9f
+      sha256: "08d92c1c447d8162d531c7a2e1deebdc03fff308bb37460c39069e6d0c8ab0e1"
       url: "https://pub.dev"
     source: hosted
-    version: "5.1.0"
+    version: "5.1.1"
   flutter_test:
     dependency: "direct dev"
     description: flutter

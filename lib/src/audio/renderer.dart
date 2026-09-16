@@ -76,14 +76,10 @@ Float32List renderRecipe(
   return out;
 }
 
-void _renderTone(
-  Float64List mix,
-  ToneLayer layer,
-  int sampleRate,
-) {
+void _renderTone(Float64List mix, ToneLayer layer, int sampleRate) {
   final start = (layer.offset * sampleRate).round();
-  final active =
-      ((layer.attack + layer.decay + sourceStopPadding) * sampleRate).round();
+  final active = ((layer.attack + layer.decay + sourceStopPadding) * sampleRate)
+      .round();
   if (active <= 0) return;
 
   var phase = 0.0;
@@ -104,8 +100,8 @@ void _renderNoise(
   Random random,
 ) {
   final start = (layer.offset * sampleRate).round();
-  final active =
-      ((layer.attack + layer.decay + sourceStopPadding) * sampleRate).round();
+  final active = ((layer.attack + layer.decay + sourceStopPadding) * sampleRate)
+      .round();
   if (active <= 0) return;
 
   final filter = Biquad.from(
@@ -171,7 +167,8 @@ double _toneFrequency(ToneLayer layer, double localTime) {
     } else if (localTime >= glideTime) {
       freq = glideTo;
     } else {
-      freq = layer.frequency *
+      freq =
+          layer.frequency *
           pow(glideTo / layer.frequency, localTime / glideTime);
     }
   }

@@ -2,7 +2,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/widgets.dart';
 
 import '../audio/engine.dart';
-import '../sounds/recipes.dart';
+import '../sounds/sound_spec.dart';
 
 /// Pointer-aware interaction binding, the Flutter equivalent of `bind()`.
 ///
@@ -12,6 +12,9 @@ import '../sounds/recipes.dart';
 /// | press    | [SoundName.press] | pointer down |
 /// | release  | [SoundName.release] | pointer up |
 /// | toggle   | [SoundName.toggle] | tap |
+///
+/// Each intent takes a [SoundSpec]: [SoundSpec.system] for global volume only,
+/// or [SoundSpec.custom] for a per-play scale.
 class CuelumeListener extends StatelessWidget {
   const CuelumeListener({
     super.key,
@@ -24,20 +27,22 @@ class CuelumeListener extends StatelessWidget {
   });
 
   /// Sound to play on fine-pointer enter. `null` disables hover.
-  /// Pass [SoundName.chime] (or any name) to enable; defaults are applied
-  /// when the named intent is non-null.
-  final SoundName? hover;
+  final SoundSpec? hover;
 
   /// Sound to play on pointer down.
-  final SoundName? press;
+  final SoundSpec? press;
 
   /// Sound to play on pointer up.
-  final SoundName? release;
+  final SoundSpec? release;
 
   /// Sound to play on tap, including keyboard activation of buttons.
-  final SoundName? toggle;
+  final SoundSpec? toggle;
 
+  /// How this listener participates in hit testing. Passed to the inner
+  /// [Listener] and [GestureDetector] when those intents are bound.
   final HitTestBehavior behavior;
+
+  /// The widget that receives pointer and hover events.
   final Widget child;
 
   @override
@@ -47,12 +52,8 @@ class CuelumeListener extends StatelessWidget {
     if (press != null || release != null) {
       built = Listener(
         behavior: behavior,
-        onPointerDown: press == null
-            ? null
-            : (_) => Cuelume.play(press!),
-        onPointerUp: release == null
-            ? null
-            : (_) => Cuelume.play(release!),
+        onPointerDown: press == null ? null : (_) => _play(press!),
+        onPointerUp: release == null ? null : (_) => _play(release!),
         child: built,
       );
     }
@@ -60,7 +61,7 @@ class CuelumeListener extends StatelessWidget {
     if (toggle != null) {
       built = GestureDetector(
         behavior: behavior,
-        onTap: () => Cuelume.play(toggle!),
+        onTap: () => _play(toggle!),
         child: built,
       );
     }
@@ -70,13 +71,22 @@ class CuelumeListener extends StatelessWidget {
         onEnter: (event) {
           if (!_isFineMouse(event)) return;
           if (!allowHoverPlay()) return;
-          Cuelume.play(hover!);
+          _play(hover!);
         },
         child: built,
       );
     }
 
     return built;
+  }
+
+  static void _play(SoundSpec spec) {
+    switch (spec) {
+      case SystemSoundSpec(:final name):
+        Cuelume.play(name);
+      case CustomSoundSpec(:final name, :final volume):
+        Cuelume.play(name, volume: volume);
+    }
   }
 }
 

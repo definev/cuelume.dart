@@ -39,7 +39,7 @@ final class Cuelume {
     await _ensureReady();
   }
 
-  /// Plays a sound immediately. Defaults to [SoundName.chime].
+  /// Plays [sound] immediately.
   ///
   /// [volume] scales this play only, then multiplies the global volume.
   /// Missing backends, disabled playback, and zero volume are silent no-ops.

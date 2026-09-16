@@ -1,0 +1,42 @@
+# If this file exists, pub uses it *instead of* .gitignore.
+
+# Miscellaneous
+*.class
+*.log
+*.pyc
+*.swp
+.DS_Store
+.atom/
+.buildlog/
+.history
+.svn/
+migrate_working_dir/
+
+# IntelliJ
+*.iml
+*.ipr
+*.iws
+.idea/
+
+# Flutter / Dart / Pub
+.dart_tool/
+.flutter-plugins-dependencies
+.metadata
+build/
+coverage/
+**/doc/api/
+pubspec.lock
+
+# Internal design notes
+docs/
+
+# Example platform scaffolding and build output
+example/.dart_tool/
+example/build/
+example/android/
+example/ios/
+example/linux/
+example/macos/
+example/windows/
+example/web/
+example/**/ephemeral/

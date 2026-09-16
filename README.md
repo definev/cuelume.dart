@@ -8,13 +8,12 @@ toggles, and completed actions clear feedback without asking you to design
 sounds. Call `play()`, wrap a listener, done.
 
 This is a Flutter port of [Danilaa1/cuelume](https://github.com/Danilaa1/cuelume).
-Architecture: [ADR-0001](docs/adr/0001-flutter-port-architecture.md).
 
 ## Install
 
 ```yaml
 dependencies:
-  cuelume: ^0.1.0
+  cuelume: ^1.0.0
 ```
 
 ```dart
@@ -34,8 +33,8 @@ Or bind them to a widget:
 
 ```dart
 CuelumeListener(
-  press: SoundName.press,
-  release: SoundName.release,
+  press: SoundSpec.custom(SoundName.press, volume: 0.5),
+  release: SoundSpec.system(SoundName.release),
   child: const Text('Save'),
 )
 ```
@@ -46,6 +45,8 @@ CuelumeListener(
 | `press` | pointer down | `press` |
 | `release` | pointer up | `release` |
 | `toggle` | tap | `toggle` |
+
+Each intent takes a `SoundSpec`: `SoundSpec.system(name)` for global volume only, or `SoundSpec.custom(name, volume: x)` for a per-play scale.
 
 Need sound preferences? Your app owns the settings; Cuelume only applies them:
 
@@ -106,7 +107,7 @@ flutter run -d chrome
 ## API
 
 ```dart
-Cuelume.play([sound], {volume});
+Cuelume.play(sound, {volume});
 Cuelume.setEnabled(enabled);
 Cuelume.setVolume(volume);
 Cuelume.warmup();
@@ -114,10 +115,10 @@ Cuelume.wrap(callback, [sound]);
 Cuelume.sounds; // List<SoundName>
 ```
 
-- **`play`** — play a sound immediately. Defaults to `chime`.
+- **`play`** — play a sound immediately.
 - **`setEnabled`** — enable or disable future playback. Does not persist or stop sounds already playing.
 - **`setVolume`** — global volume for future playback, clamped to `0–1`. Non-finite values are ignored.
-- **`CuelumeListener`** — hover / press / release / toggle binding.
+- **`CuelumeListener`** — hover / press / release / toggle binding. Each intent is a `SoundSpec`.
 - **`wrap`** — play on an existing `VoidCallback`, then call it.
 
 ## Defaults that behave
